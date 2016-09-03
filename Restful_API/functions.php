@@ -101,7 +101,7 @@ function deleteProduct($id) {
 	dbDelete('Product', $id,idProduct);
 }
 
-
+//----Customer
 
 // get all Customer
 function getCustomer() {
@@ -180,24 +180,28 @@ function deleteCustomer($id) {
 
 //update Customer
 function updateCustomer($id,$params) {
-	$sql="Update employee
-		 SET fname=:fname, minit=:minit, lname=:lname, bdate=:bdate, address=:address,
-		 sex=:sex, salary=:salary, supervisor=:supervisor, dep=:dep, email=:email
-         Where id=:id";
+	$sql="Update Customer
+		 SET Customer_Username=:Customer_Username, Customer_Password=:Customer_Password, Customer_Email=:Customer_Email, Customer_EmailVerfied=:Customer_EmailVerfied, Customer_Firstname=:Customer_Firstname, Customer_Lastname=:Customer_Lastname, Customer_PhoneNumber=:Customer_PhoneNumber, Customer_Fax=:Customer_Fax, Customer_Address=:Customer_Address, Customer_Address2=:Customer_Address2, Customer_Gender=:Customer_Gender, Customer_Country=:Customer_Country, Customer_State=:Customer_State, Customer_City=:Customer_City, Customer_Zip=:Customer_Zip
+         Where idCustomer=:id";
 	try {
 		$db = getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':id', $id);
-        $stmt->bindParam(':fname', $params->fname);
-		$stmt->bindParam(':minit', $params->minit);
-		$stmt->bindParam(':lname', $params->lname);
-		$stmt->bindParam(':bdate', $params->bdate);
-		$stmt->bindParam(':address', $params->address);
-		$stmt->bindParam(':sex', $params->sex);
-		$stmt->bindParam(':salary', $params->salary);
-		$stmt->bindParam(':supervisor', $params->supervisor);
-		$stmt->bindParam(':dep', $params->dep);
-		$stmt->bindParam(':email', $params->email);
+        $stmt->bindParam(':Customer_Username', $params->Customer_Username);
+		$stmt->bindParam(':Customer_Password', $params->Customer_Password);
+		$stmt->bindParam(':Customer_Email', $params->Customer_Email);
+		$stmt->bindParam(':Customer_EmailVerfied', $params->Customer_EmailVerfied);
+		$stmt->bindParam(':Customer_Firstname', $params->Customer_Firstname);
+        $stmt->bindParam(':Customer_Lastname', $params->Customer_Lastname);
+		$stmt->bindParam(':Customer_PhoneNumber', $params->Customer_PhoneNumber);
+		$stmt->bindParam(':Customer_Fax', $params->Customer_Fax);
+		$stmt->bindParam(':Customer_Address', $params->Customer_Address);
+		$stmt->bindParam(':Customer_Address2', $Customer_Address2);
+		$stmt->bindParam(':Customer_Gender', $params->Customer_Gender);
+        $stmt->bindParam(':Customer_Country', $params->Customer_Country);
+        $stmt->bindParam(':Customer_State', $params->Customer_State);
+        $stmt->bindParam(':Customer_City', $params->Customer_City);
+        $stmt->bindParam(':Customer_Zip', $params->Customer_Zip);
 		$result = $stmt->execute ();
 		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
 		$db = null; //closes pdo-connection
@@ -211,6 +215,9 @@ function updateCustomer($id,$params) {
 	
 	}
 }
+
+
+//---Staff
 
 // get all Staff
 function getStaff() {
@@ -305,6 +312,8 @@ function updateStaff($id,$params) {
 	}
 }
 
+//---Category   
+
 // get all Category
 function getCategory() {
     $sql="SELECT * from Category";
@@ -394,9 +403,12 @@ function updateCategory($id,$params) {
 
 
 
-// get all Rating
-function getRating() {
-    $sql="SELECT * from Rating";
+//----Orders
+
+
+// get all Orders
+function getOrders() {
+    $sql="SELECT * from Orders";
     try {
         $db = getDB();
         $stmt = $db->query($sql);
@@ -409,10 +421,10 @@ function getRating() {
 }
 
 
-// get Rating by id
-function getRatingById($id) {
-    $sql="SELECT * from Rating
-    Where idRating=:id";
+// get Orders by id
+function getOrdersById($id) {
+    $sql="SELECT * from Orders
+    Where idOrder=:id";
     try {
         $db = getDB();	
         $stmt = $db->prepare($sql);
@@ -426,15 +438,29 @@ function getRatingById($id) {
     }
 }
 
-//create Rating 
-function createRating ($params) {
-	$sql="INSERT INTO Rating (Category_Name, Category_ParentID) 
-	VALUES (:Category_Name, :Category_ParentID)";
+
+//create Orders 
+function createOrders ($params) {
+	$sql="INSERT INTO Orders (Customer_idCustomer, Product_idProduct, Product_Staff_idStaff , Order_Amount, Order_ShipName, Order_ShipAddress, Order_Country, Order_State, Order_City, Order_Zip ,Order_Phone, Order_Fax, Order_Tax ,Order_Email , Order_TrackingNumber) 
+	VALUES (:Customer_idCustomer, :Product_idProduct, :Product_Staff_idStaff , :Order_Amount, :Order_ShipName, :Order_ShipAddress, :Order_Country, :Order_State, :Order_City, :Order_Zip, :Order_Phone, :Order_Fax, :Order_Tax , :Order_Email , :Order_TrackingNumber)";
 	try {
 		$db = getDB();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':Category_Name', $params->Category_Name);
-		$stmt->bindParam(':Category_ParentID', $params->Category_ParentID);
+        $stmt->bindParam(':Customer_idCustomer', $params->Customer_idCustomer);
+		$stmt->bindParam(':Product_idProduct', $params->Product_idProduct);
+        $stmt->bindParam(':Product_Staff_idStaff', $params->Product_Staff_idStaff);
+        $stmt->bindParam(':Order_Amount', $params->Order_Amount);
+        $stmt->bindParam(':Order_ShipName', $params->Order_ShipName);
+        $stmt->bindParam(':Order_ShipAddress', $params->Order_ShipAddress);
+        $stmt->bindParam(':Order_Country', $params->Order_Country);
+        $stmt->bindParam(':Order_State', $params->Order_State);
+        $stmt->bindParam(':Order_City', $params->Order_City);
+        $stmt->bindParam(':Order_Zip', $params->Order_Zip);
+        $stmt->bindParam(':Order_Phone', $params->Order_Phone);
+        $stmt->bindParam(':Order_Fax', $params->Order_Fax);
+        $stmt->bindParam(':Order_Tax', $params->Order_Tax);
+        $stmt->bindParam(':Order_Email', $params->Order_Email);
+        $stmt->bindParam(':Order_TrackingNumber', $params->Order_TrackingNumber);
 		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
 		$result = $stmt->execute ();
 		$db = null; //closes pdo-connection
@@ -449,26 +475,39 @@ function createRating ($params) {
 }
 }
 
-//delete Rating
-function deleteRating($id) {
+//delete Orders
+function deleteOrders($id) {
 	$id = (int)$id;
 	if (empty($id)) {
 		exitWithError('invalid or missing id');
 	}
-	dbDelete('Rating', $id,idRating);
+	dbDelete('Orders', $id,idOrder);
 }
 
-//update Rating
-function updateRating($id,$params) {
-	$sql="Update Category
-		 SET Category_Name=:Category_Name, Category_ParentID=:Category_ParentID
-         Where idCategory=:id";
+//update Orders
+function updateOrders($id,$params) {
+	$sql="Update Orders
+		 SET Customer_idCustomer=:Customer_idCustomer , Product_idProduct=:Product_idProduct , Product_Staff_idStaff=:Product_Staff_idStaff , Order_Amount=:Order_Amount , Order_ShipName=:Order_ShipName , Order_ShipAddress=:Order_ShipAddress , Order_Country=:Order_Country , Order_State=:Order_State , Order_City=:Order_City , Order_Zip=:Order_Zip ,Order_Phone=:Order_Phone , Order_Fax=:Order_Fax , Order_Tax=:Order_Tax ,Order_Email=:Order_Email , Order_TrackingNumber=:Order_TrackingNumber
+         Where idOrder=:id";
 	try {
 		$db = getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':id', $id);
-         $stmt->bindParam(':Category_Name', $params->Category_Name);
-		$stmt->bindParam(':Category_ParentID', $params->Category_ParentID);
+        $stmt->bindParam(':Customer_idCustomer', $params->Customer_idCustomer);
+		$stmt->bindParam(':Product_idProduct', $params->Product_idProduct);
+        $stmt->bindParam(':Product_Staff_idStaff', $params->Product_Staff_idStaff);
+        $stmt->bindParam(':Order_Amount', $params->Order_Amount);
+        $stmt->bindParam(':Order_ShipName', $params->Order_ShipName);
+        $stmt->bindParam(':Order_ShipAddress', $params->Order_ShipAddress);
+        $stmt->bindParam(':Order_Country', $params->Order_Country);
+        $stmt->bindParam(':Order_State', $params->Order_State);
+        $stmt->bindParam(':Order_City', $params->Order_City);
+        $stmt->bindParam(':Order_Zip', $params->Order_Zip);
+        $stmt->bindParam(':Order_Phone', $params->Order_Phone);
+        $stmt->bindParam(':Order_Fax', $params->Order_Fax);
+        $stmt->bindParam(':Order_Tax', $params->Order_Tax);
+        $stmt->bindParam(':Order_Email', $params->Order_Email);
+        $stmt->bindParam(':Order_TrackingNumber', $params->Order_TrackingNumber);
 		$result = $stmt->execute ();
 		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
 		$db = null; //closes pdo-connection
@@ -483,6 +522,7 @@ function updateRating($id,$params) {
 }
 
 
+//___Comment
 
 // get all Comment
 function getComment() {
@@ -518,13 +558,14 @@ function getCommentById($id) {
 
 //create Comment 
 function createComment ($params) {
-	$sql="INSERT INTO Rating (Category_Name, Category_ParentID) 
-	VALUES (:Category_Name, :Category_ParentID)";
+	$sql="INSERT INTO Comment (Comment_Msg , Customer_idCustomer, Product_idProduct)
+    VALUES (:Comment_Msg, :Customer_idCustomer, :Product_idProduct)";
 	try {
 		$db = getDB();
         $stmt = $db->prepare($sql);
-        $stmt->bindParam(':Category_Name', $params->Category_Name);
-		$stmt->bindParam(':Category_ParentID', $params->Category_ParentID);
+        $stmt->bindParam(':Comment_Msg', $params->Comment_Msg);
+		$stmt->bindParam(':Customer_idCustomer', $params->Customer_idCustomer);
+        $stmt->bindParam(':Product_idProduct', $params->Product_idProduct);
 		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
 		$result = $stmt->execute ();
 		$db = null; //closes pdo-connection
@@ -550,15 +591,16 @@ function deleteComment($id) {
 
 //update Comment
 function updateComment($id,$params) {
-	$sql="Update Category
-		 SET Category_Name=:Category_Name, Category_ParentID=:Category_ParentID
-         Where idCategory=:id";
+	$sql="Update Comment
+		 SET Comment_Msg= :Comment_Msg , Customer_idCustomer= :Customer_idCustomer, Product_idProduct= :Product_idProduct
+         Where idComment=:id";
 	try {
 		$db = getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':id', $id);
-         $stmt->bindParam(':Category_Name', $params->Category_Name);
-		$stmt->bindParam(':Category_ParentID', $params->Category_ParentID);
+        $stmt->bindParam(':Comment_Msg', $params->Comment_Msg);
+		$stmt->bindParam(':Customer_idCustomer', $params->Customer_idCustomer);
+        $stmt->bindParam(':Product_idProduct', $params->Product_idProduct);
 		$result = $stmt->execute ();
 		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
 		$db = null; //closes pdo-connection
@@ -572,10 +614,12 @@ function updateComment($id,$params) {
 	}
 }
 
+//---Rating
 
-// get all Orders
-function getOrders() {
-    $sql="SELECT * from Orders";
+
+// get all Rating
+function getRating() {
+    $sql="SELECT * from Rating";
     try {
         $db = getDB();
         $stmt = $db->query($sql);
@@ -588,10 +632,10 @@ function getOrders() {
 }
 
 
-// get Orders by id
-function getOrdersById($id) {
-    $sql="SELECT * from Orders
-    Where idOrder=:id";
+// get Rating by id
+function getRatingById($id) {
+    $sql="SELECT * from Rating
+    Where idRating=:id";
     try {
         $db = getDB();	
         $stmt = $db->prepare($sql);
@@ -604,6 +648,66 @@ function getOrdersById($id) {
 			return '{"error":{"text":'. $e->getMessage() .'}}';
     }
 }
+
+//create Rating 
+function createRating ($params) {
+	$sql="INSERT INTO Rating (Rating_Value, Customer_idCustomer, Product_idProduct) 
+	VALUES (:Rating_Value, :Customer_idCustomer, :Product_idProduct)";
+	try {
+		$db = getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':Rating_Value', $params->Rating_Value);
+		$stmt->bindParam(':Customer_idCustomer', $params->Customer_idCustomer);
+        $stmt->bindParam(':Product_idProduct', $params->Product_idProduct);
+		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
+		$result = $stmt->execute ();
+		$db = null; //closes pdo-connection
+		if ($result)
+			return '("info": "ok")';
+		else
+			return '("info": "nok")';
+	} catch(PDOException $e) {
+	   
+	return '{"error":{"text":'. $e->getMessage() .'}}';
+
+}
+}
+
+//delete Rating
+function deleteRating($id) {
+	$id = (int)$id;
+	if (empty($id)) {
+		exitWithError('invalid or missing id');
+	}
+	dbDelete('Rating', $id,idRating);
+}
+
+//update Rating
+function updateRating($id,$params) {
+	$sql="Update Rating
+		 SET Rating_Value= :Rating_Value, Customer_idCustomer= :Customer_idCustomer, Product_idProduct=:Product_idProduct
+         Where idRating=:id";
+	try {
+		$db = getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':Rating_Value', $params->Rating_Value);
+		$stmt->bindParam(':Customer_idCustomer', $params->Customer_idCustomer);
+        $stmt->bindParam(':Product_idProduct', $params->Product_idProduct);
+		$result = $stmt->execute ();
+		echo $stmt->debugDumpParams().'\n'.var_export(    $stmt->errorInfo());
+		$db = null; //closes pdo-connection
+		if ($result)
+			return '("info": "ok")';
+		else
+			return '("info": "nok")';
+	} catch(PDOException $e) {
+	   
+	return '{"error":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+
 /////////////////////////
 
 function getRequestDataAsObject() {
@@ -653,93 +757,6 @@ function validateWorkData($data) {
 
 
 
-// get all Order
-function getOrder() {
-    $sql="SELECT * from Order";
-    try {
-        $db = getDB();
-        $stmt = $db->query($sql);
-        $object = $stmt->fetchAll(PDO::FETCH_OBJ);
-        $db = null;
-        return '{"data": ' . json_encode($object, JSON_UNESCAPED_UNICODE) . '}';
-        } catch(PDOException $e) {
-            return '{"error":{"text":'. $e->getMessage() .'}}';
-    }
-}
-
-
-// get Order by id
-function getOrderById($id) {
-    $sql="SELECT * from Order
-    Where idOrder=:id";
-    try {
-        $db = getDB();	
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        $object = $stmt->fetchAll(PDO::FETCH_OBJ);
-        $db = null;
-        return '{"data": ' . json_encode($object, JSON_UNESCAPED_UNICODE) . '}';
-        } catch(PDOException $e) {        
-			return '{"error":{"text":'. $e->getMessage() .'}}';
-    }
-}
-
-//create Order 
-function createOrder ($params) {
-	$sql="INSERT INTO Order (Category_Name, Category_ParentID) 
-	VALUES (:Category_Name, :Category_ParentID)";
-	try {
-		$db = getDB();
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':Category_Name', $params->Category_Name);
-		$stmt->bindParam(':Category_ParentID', $params->Category_ParentID);
-		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
-		$result = $stmt->execute ();
-		$db = null; //closes pdo-connection
-		if ($result)
-			return '("info": "ok")';
-		else
-			return '("info": "nok")';
-	} catch(PDOException $e) {
-	   
-	return '{"error":{"text":'. $e->getMessage() .'}}';
-
-}
-}
-
-//delete Order
-function deleteOrder($id) {
-	$id = (int)$id;
-	if (empty($id)) {
-		exitWithError('invalid or missing id');
-	}
-	dbDelete('Order', $id,idOrder);
-}
-
-//update Order
-function updateOrder($id,$params) {
-	$sql="Update Order
-		 SET Category_Name=:Category_Name, Category_ParentID=:Category_ParentID
-         Where idOrder=:id";
-	try {
-		$db = getDB();
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':id', $id);
-         $stmt->bindParam(':Category_Name', $params->Category_Name);
-		$stmt->bindParam(':Category_ParentID', $params->Category_ParentID);
-		$result = $stmt->execute ();
-		echo $stmt->debugDumpParams().'\n'.var_export($stmt->errorInfo());
-		$db = null; //closes pdo-connection
-		if ($result)
-			return '("info": "ok")';
-		else
-			return '("info": "nok")';
-	} catch(PDOException $e) {
-	   
-	return '{"error":{"text":'. $e->getMessage() .'}}';
-	}
-}
 
 /////////////////////////
 function dbQuery($sql, $params = array()) {

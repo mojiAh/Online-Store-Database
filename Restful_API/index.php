@@ -187,7 +187,7 @@ $app->put('/Category/{id}',function (Request $request, Response $response) {
 });
 
 
-
+//-----Orders
 
 //get all Orders
 $app->get('/Orders',function (Request $request, Response $response) {
@@ -233,7 +233,7 @@ $app->put('/Orders/{id}',function (Request $request, Response $response) {
 });
 
 
-
+//____Comment
 
 //get all Comment
 $app->get('/Comment',function (Request $request, Response $response) {
@@ -278,7 +278,7 @@ $app->put('/Comment/{id}',function (Request $request, Response $response) {
 	return $response;
 });
 
-
+//____Rating
 
 
 //get all Rating
